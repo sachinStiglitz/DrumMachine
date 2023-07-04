@@ -45,16 +45,28 @@ const DrumMachine = () => {
     },
   };
 
-  const playSound = (key) => {
-    if (powerOn) {
-      const sound = drumSounds[key].sound;
-      sound.volume = volume;
-      sound.currentTime = 0;
-      sound.play();
-      setDisplayText(drumSounds[key].name);
-    }
-  };
+const playSound = (key) => {
+  if (powerOn) {
+    const sound = drumSounds[key].sound;
+    sound.volume = volume;
+    sound.currentTime = 0;
 
+    // Play the sound on the next user interaction event
+    const playPromise = sound.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          // Playback started successfully
+          setDisplayText(drumSounds[key].name);
+        })
+        .catch((error) => {
+          // Playback failed or was blocked
+          console.log(error);
+        });
+    }
+  }
+};
+  
   const togglePower = () => {
     setPowerOn(!powerOn);
     setDisplayText(powerOn ? "Power Off" : "Power On");
