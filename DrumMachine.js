@@ -51,29 +51,23 @@ const playSound = (key) => {
     sound.volume = volume;
     sound.currentTime = 0;
 
-    // Create a new AudioContext
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    // Log some debug information
+    console.log('Attempting to play sound:', key);
+    console.log('Sound object:', sound);
 
-    // Create a new AudioBufferSourceNode
-    const source = audioContext.createBufferSource();
-
-    // Connect the audio source to the destination (output)
-    source.connect(audioContext.destination);
-
-    // Load the audio clip into the audio source
-    audioContext.decodeAudioData(
-      sound.response,
-      (buffer) => {
-        source.buffer = buffer;
-        source.start(0); // Start playing the audio
+    sound.play()
+      .then(() => {
+        // Playback started successfully
+        console.log('Sound playback started');
         setDisplayText(drumSounds[key].name);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+      })
+      .catch((error) => {
+        // Playback encountered an error
+        console.log('Error playing sound:', error);
+      });
   }
 };
+
   
   const togglePower = () => {
     setPowerOn(!powerOn);
