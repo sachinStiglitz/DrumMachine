@@ -1,11 +1,6 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 const DrumMachine = () => {
-  const [powerOn, setPowerOn] = useState(true);
-  const [equalizerOn, setEqualizerOn] = useState(false);
-  const [volume, setVolume] = useState(0.5);
-  const [displayText, setDisplayText] = useState("Power On");
-
   const drumSounds = {
     Q: {
       sound: new Audio("https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3"),
@@ -45,82 +40,57 @@ const DrumMachine = () => {
     },
   };
 
-const playSound = (key) => {
-  if (powerOn) {
-    const sound = drumSounds[key].sound;
-    sound.volume = volume;
-    sound.currentTime = 0;
+  const [powerOn, setPowerOn] = useState(true);
+  const [displayText, setDisplayText] = useState('Power On');
 
-    // Log some debug information
-    console.log('Attempting to play sound:', key);
-    console.log('Sound object:', sound);
-
-    sound.play()
-      .then(() => {
-        // Playback started successfully
-        console.log('Sound playback started');
+  // Function to play a drum sound
+  const playSound = (key) => {
+    if (powerOn) {
+      const sound = drumSounds[key].sound;
+      sound.currentTime = 0;
+      sound.play().then(() => {
         setDisplayText(drumSounds[key].name);
-      })
-      .catch((error) => {
-        // Playback encountered an error
-        console.log('Error playing sound:', error);
       });
-  }
-};
-
-  
-  const togglePower = () => {
-    setPowerOn(!powerOn);
-    setDisplayText(powerOn ? "Power Off" : "Power On");
+    }
   };
 
-  const toggleEqualizer = () => {
-    setEqualizerOn(!equalizerOn);
+  // Function to handle keydown events
+  const handleKeyDown = (event) => {
+    const key = event.key.toUpperCase();
+    if (drumSounds.hasOwnProperty(key)) {
+      playSound(key);
+    }
   };
 
-  const changeVolume = (value) => {
-    setVolume(value);
-  };
+  // Attach keydown event listener to the document
+  React.useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  // Rest of the component code...
 
   return (
     <div id="drum-machine">
       <div id="display">{displayText}</div>
       <div className="drum-pads">
         <div className="row">
-          {Object.keys(drumSounds).map((key) => (
-            <button
-              className="drum-pad"
-              id={key}
-              key={key}
-              onClick={() => playSound(key)}
-            >
-              {key}
-              <audio className="clip" id={key} src={drumSounds[key].sound}></audio>
-            </button>
-          ))}
+          <button className="drum-pad" onClick={() => playSound('Q')}>Q</button>
+          <button className="drum-pad" onClick={() => playSound('W')}>W</button>
+          <button className="drum-pad" onClick={() => playSound('E')}>E</button>
         </div>
-      </div>
-      <div id="controls">
-        <button id="powerButton" className="control-button" onClick={togglePower}>
-          Power
-        </button>
-        <button
-          id="equalizerButton"
-          className="control-button"
-          onClick={toggleEqualizer}
-        >
-          Equalizer
-        </button>
-        <input
-          id="volumeSlider"
-          className="control-slider"
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value={volume}
-          onChange={(e) => changeVolume(e.target.value)}
-        />
+        <div className="row">
+          <button className="drum-pad" onClick={() => playSound('A')}>A</button>
+          <button className="drum-pad" onClick={() => playSound('S')}>S</button>
+          <button className="drum-pad" onClick={() => playSound('D')}>D</button>
+        </div>
+        <div className="row">
+          <button className="drum-pad" onClick={() => playSound('Z')}>Z</button>
+          <button className="drum-pad" onClick={() => playSound('X')}>X</button>
+          <button className="drum-pad" onClick={() => playSound('C')}>C</button>
+        </div>
       </div>
     </div>
   );
