@@ -51,19 +51,27 @@ const playSound = (key) => {
     sound.volume = volume;
     sound.currentTime = 0;
 
-    // Play the sound on the next user interaction event
-    const playPromise = sound.play();
-    if (playPromise !== undefined) {
-      playPromise
-        .then(() => {
-          // Playback started successfully
-          setDisplayText(drumSounds[key].name);
-        })
-        .catch((error) => {
-          // Playback failed or was blocked
-          console.log(error);
-        });
-    }
+    // Create a new AudioContext
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+    // Create a new AudioBufferSourceNode
+    const source = audioContext.createBufferSource();
+
+    // Connect the audio source to the destination (output)
+    source.connect(audioContext.destination);
+
+    // Load the audio clip into the audio source
+    audioContext.decodeAudioData(
+      sound.response,
+      (buffer) => {
+        source.buffer = buffer;
+        source.start(0); // Start playing the audio
+        setDisplayText(drumSounds[key].name);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 };
   
