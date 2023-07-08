@@ -1,0 +1,119 @@
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  text-align: center;
+  color: white;
+}
+
+body {
+  background-color: #f2f2f2;
+}
+
+#drum_machine {
+  text-align: center;
+}
+
+.app_title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.display-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#display-pads {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, minmax(20px, 1fr));
+  grid-gap: 10px;
+  margin-top: 50px;
+}
+
+.drum-pad {
+  padding: 20px;
+  cursor: pointer;
+  background-color: #333333;
+  color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+  text-align: center;
+  font-size: 20px;
+}
+
+.drum-pad:hover {
+  background-color: #404040;
+}
+
+.drum-pad:active {
+  transform: scale(1.05);
+}
+
+.current-text {
+  text-align: center;
+  font-size: 20px;
+  color: white;
+  margin-top: 30px;
+}
+
+/* Power button */
+#power-button {
+  padding: 10px 20px;
+  background-color: #555555;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  margin-top: 20px;
+}
+
+#power-button:hover {
+  background-color: #666666;
+}
+
+#power-button:active {
+  transform: scale(1.05);
+}
+
+/* Volume slider */
+#volume-slider {
+  width: 200px;
+  margin-top: 20px;
+  margin-left: 20px;
+}
+
+/* Ambient Background Animation */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: radial-gradient(#111, rgba(0, 0, 0, 0.8));
+  z-index: -1;
+  animation: ambientAnimation 20s infinite;
+}
+
+@keyframes ambientAnimation {
+  0% {
+    background-position: 50% 100%;
+  }
+  50% {
+    background-position: 50% 0%;
+  }
+  100% {
+    background-position: 50% 100%;
+  }
+}
